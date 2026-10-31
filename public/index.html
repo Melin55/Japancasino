@@ -1,24 +1,66 @@
 <!doctype html>
 <html lang="ja">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Japancasino — 開発用スターター</title>
-    <style>
-      :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
-      body { margin: 0; min-height: 100vh; display: grid; place-items: center; }
-      main { width: min(40rem, calc(100% - 3rem)); padding-block: 3rem; }
-      h1 { font-size: clamp(2rem, 7vw, 3.5rem); margin-bottom: 1rem; }
-      p { line-height: 1.8; }
-      small { opacity: .7; }
-    </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#f7f7f2" />
+    <meta
+      name="description"
+      content="会社を知り、あなたの好みを知る。いまの情報を引き継いで、次のホームページを一緒につくるサービスです。"
+    />
+    <title>HPいい感じにしますくん — 会社らしさ、その先へ。</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script type="module" src="/app.js"></script>
   </head>
   <body>
-    <main>
-      <small>開発用スターター</small>
-      <h1>Japancasino</h1>
-      <p>開発環境の起動確認用ページです。</p>
-      <p>アプリの機能は、ここから追加していきます。</p>
-    </main>
+    <a class="skip-link" href="#app">メインコンテンツへ</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="HPいい感じにしますくん ホーム"
+        ><span class="brand-mark" aria-hidden="true">i<span>✳</span></span
+        ><span class="brand-word"
+          >iikanji<span class="brand-dot">.</span
+          ><small>HPいい感じにしますくん</small></span
+        ></a
+      >
+      <nav aria-label="メイン">
+        <button class="text-button" id="about-button">
+          どうやってつくる？ <span aria-hidden="true">↗</span></button
+        ><button class="resume-button hidden" id="resume-button">
+          つづきから →
+        </button>
+      </nav>
+    </header>
+    <main id="app" tabindex="-1"></main>
+    <footer class="site-footer">
+      <span>会社らしさ、その先へ。</span
+      ><span>made with a little more <b>iikanji.</b></span>
+    </footer>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <dialog id="about-dialog">
+      <button class="close-dialog" aria-label="閉じる">×</button
+      ><span class="eyebrow">HOW IT WORKS</span>
+      <h2>むずかしい言葉より、<br />「これ、好き」から。</h2>
+      <ol class="how-list">
+        <li>
+          <b>URLをひとつ。</b>
+          <p>公開情報を調べて、会社の強みと競合を整理します。</p>
+        </li>
+        <li>
+          <b>10件を、直感で採点。</b>
+          <p>業界を越えて選んだ参考サイトから、好みを探ります。</p>
+        </li>
+        <li>
+          <b>新しいHPを、見てみる。</b>
+          <p>元の情報を引き継ぎ、採点を反映した仮サイトを提案します。</p>
+        </li>
+      </ol>
+      <p class="muted">
+        今のサイトが自動で書き換わることはありません。公開前に、内容と動作を確認できます。
+      </p>
+    </dialog>
+    <noscript
+      >このサービスを利用するにはJavaScriptを有効にしてください。</noscript
+    >
   </body>
 </html>
