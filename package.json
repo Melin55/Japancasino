@@ -1,0 +1,29 @@
+{
+  "name": "hp-iikanji",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env.local server/index.js",
+    "dev": "node --env-file-if-exists=.env.local --watch server/index.js",
+    "test": "node --test tests/*.test.js",
+    "check": "node --check server/index.js && node --check public/app.js",
+    "evaluate": "node scripts/evaluate.mjs",
+    "build:site": "node scripts/build-site.mjs",
+    "preview:site": "node scripts/preview-site.mjs",
+    "pretest": "npm run build:site"
+  },
+  "dependencies": {
+    "@noble/hashes": "2.4.0",
+    "cheerio": "1.1.2",
+    "fflate": "0.8.3",
+    "robots-parser": "3.0.1",
+    "undici": "7.30.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}
