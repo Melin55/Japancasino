@@ -1,3 +1,5 @@
+const hosted = document.documentElement.dataset.hosted === "true";
+const engine = hosted ? await import("/engine.js") : null;
 const app = document.querySelector("#app");
 const e = (value) =>
   String(value ?? "").replace(
@@ -35,7 +37,7 @@ const resume = document.querySelector("#resume-button");
 if (savedId) resume.classList.remove("hidden");
 const badge = () =>
   project?.mode === "demo"
-    ? '<span class="sample-badge">SAMPLE · 架空の会社とデザインで体験中</span>'
+    ? '<span class="sample-badge">サンプル体験</span>'
     : "";
 function toast(message) {
   const t = document.querySelector("#toast");
@@ -44,6 +46,7 @@ function toast(message) {
   setTimeout(() => t.classList.remove("visible"), 3000);
 }
 async function api(path, body, method) {
+  if (engine) return engine.api(path, body, method);
   const response = await fetch(path, {
     method: method || (body ? "POST" : "GET"),
     headers: body ? { "content-type": "application/json" } : {},
@@ -89,7 +92,15 @@ function errorBox(message) {
   return `<div class="error" role="alert">${e(message)}</div>`;
 }
 function renderHome() {
-  app.innerHTML = `<section class="hero"><div class="hero-copy"><span class="eyebrow"><span class="dot"></span>A NEW CHAPTER FOR YOUR WEBSITE</span><h1>いまの会社に、<br><em>ちょうどいい</em><br>ホームページ。</h1><p>会社のことも、あなたの好みも。<br>ちゃんと知ってから、新しいHPをつくります。</p><form class="url-form" id="url-form"><fieldset class="goal-options"><legend>いちばん叶えたいこと</legend><label><input type="radio" name="goal" value="inquiry" checked>問い合わせを増やす</label><label><input type="radio" name="goal" value="brand">魅力を伝える</label><label><input type="radio" name="goal" value="recruit">採用につなげる</label></fieldset><label for="site-url">自社サイトのURL</label><div class="url-field"><span aria-hidden="true">↗</span><input id="site-url" name="url" inputmode="url" autocomplete="url" placeholder="https://your-company.jp" required maxlength="2048"><button class="primary-button" type="submit">サイトを調べる <span>→</span></button></div><p class="url-hint">公開サイトのURLだけ。今のサイトは変更されません。</p><div id="home-error"></div></form><button class="sample-link" id="sample-button">まずはサンプルで体験する <span>↗</span></button></div><div class="hero-visual" aria-label="好みを選んでサイトをつくるイメージ"><span class="visual-label">A LITTLE INSPIRATION.</span><div class="visual-orbit"></div><div class="mock-browser mock-back"><div class="browser-bar"><i></i><i></i><i></i><span>FORM / SAMPLE</span></div><div class="mock-content"><div class="mock-nav">FORM /</div><p><strong>Make room<br>for better.</strong></p><div class="green-box"></div></div></div><div class="mock-browser mock-front"><div class="browser-bar"><i></i><i></i><i></i><span>ATELIER / SAMPLE</span></div><div class="mock-content"><div class="mock-nav"><b>atelier.</b><small>ABOUT &nbsp; WORKS &nbsp; CONTACT</small></div><h3>A little more<br>meaningful.</h3><div class="room"><div class="window"></div><div class="chair"></div><div class="plant"></div></div><div class="mock-footer"><span>SPACES FOR EVERYDAY LIFE</span><span>VIEW WORKS ↗</span></div></div></div><div class="like-sticker">この雰囲気、好き。<span class="sticker-stars" aria-label="5つ星">★★★★★</span></div><div class="taste-pill"><b>✳</b>「好き」が、いいHPのヒントに。</div></div></section><section class="how-strip" aria-label="3つのステップ"><div class="how-item"><span>01</span><div><b>会社を、ちゃんと知る。</b><p>事業・強み・競合を、公開情報から整理。</p></div></div><div class="how-item"><span>02</span><div><b>10件を、直感で選ぶ。</b><p>業界を越えた参考サイトを、1〜5点で採点。</p></div></div><div class="how-item"><span>03</span><div><b>次のHPに、出会う。</b><p>元の情報を引き継いだ、新しい見せ方を提案。</p></div></div></section><section class="home-note"><span class="spark" aria-hidden="true">✳</span><div><h2>大事にしてきたことは、そのままに。</h2><p>会社の情報、ページのつながり、伝えたいこと。<br>引き継げた内容を確かめながら、これからの見せ方を考えます。</p></div></section>`;
+  app.innerHTML = `<section class="hero compact-hero"><div class="hero-copy"><span class="eyebrow">HPいい感じにしますくん</span><h1>「好き」からつくる、<br><em>次のホームページ。</em></h1><p>会社を調べる。10件を採点する。<br>今ある情報を生かして、新しいHPへ。</p><button class="primary-button preview-entry" id="sample-button">プレビューを見る <span>→</span></button><p class="preview-caption">架空の会社で体験 · 登録不要</p><form class="url-form" id="url-form"><label for="site-url">自社のサイトで試す</label><div class="url-field"><input id="site-url" name="url" inputmode="url" autocomplete="url" placeholder="https://your-company.jp" required maxlength="2048"><button class="secondary-button" type="submit">調べる →</button></div><details class="goal-details"><summary>目的を選ぶ</summary><fieldset class="goal-options"><legend class="sr-only">目的</legend><label><input type="radio" name="goal" value="inquiry" checked>問い合わせ</label><label><input type="radio" name="goal" value="brand">会社の魅力</label><label><input type="radio" name="goal" value="recruit">採用</label></fieldset></details><div id="home-error"></div><p class="url-hint" id="live-status">公開情報から調査します。</p></form></div><div class="hero-visual compact-visual" aria-hidden="true"><div class="mock-browser mock-front"><div class="browser-bar"><i></i><i></i><i></i><span>YOUR NEXT WEBSITE</span></div><div class="mock-content"><div class="mock-nav"><b>atelier.</b><small>ABOUT &nbsp; WORKS</small></div><h3>A little more<br>meaningful.</h3><div class="room"><div class="window"></div><div class="chair"></div><div class="plant"></div></div><div class="mock-footer"><span>SPACES FOR EVERYDAY LIFE</span><span>VIEW WORKS ↗</span></div></div></div><div class="like-sticker">この雰囲気、好き。<span class="sticker-stars">★★★★★</span></div></div></section>`;
+  api("/api/config").then(config => {
+    const status=document.querySelector("#live-status");
+    if (status && !config.aiAvailable) {
+      status.textContent="自社サイトのAI調査は接続準備中。プレビューは今すぐ試せます。";
+      const submit=document.querySelector('#url-form button[type="submit"]');
+      if(submit)submit.disabled=true;
+    }
+  }).catch(()=>{});
   document.querySelector("#url-form").onsubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -109,7 +120,7 @@ async function start(body, button) {
     project = await api("/api/projects", body);
     remember();
     ratingIndex = 0;
-    move(project.status === "ready" ? "research" : "progress");
+    move(project.status === "ready" ? "rating" : "progress");
   } catch (error) {
     document.querySelector("#home-error").innerHTML = errorBox(error.message);
     button.disabled = false;
@@ -120,7 +131,7 @@ function renderProgress() {
   const building = project.status === "building";
   app.innerHTML = wrapper(
     building ? 2 : 0,
-    `<div class="progress-layout"><span class="progress-flower" aria-hidden="true">✳</span>${badge()}<h1>${building ? "あなたらしい見せ方を、<br>組み立てています。" : "会社のことを、<br>ひとつずつ調べています。"}</h1><p class="muted">${building ? "採点を反映しながら、元の情報との対応を確認しています。" : "自社の情報と外部の情報を照らし合わせます。数分かかることがあります。"}</p><div class="progress-log" role="status" aria-live="polite">${building ? '<span><b>✓ 10件の採点を受け取りました</b></span><span class="working"><i class="mini-loader"></i>構成とデザインを検討しています</span><span>本文・リンク・パンくずを検査します</span>' : `<span class="${project.status === "crawling" ? "working" : ""}">${project.status === "crawling" ? '<i class="mini-loader"></i>' : "✓ "}公開ページを取得 ${project.progress?.pages ? `· ${project.progress.pages}ページ確認済み` : ""}</span><span class="${project.status === "researching" ? "working" : ""}">${project.status === "researching" ? '<i class="mini-loader"></i>' : ""}事業・競合・出典を調査</span><span>10件の参考サイトを整理</span>`}</div><p class="muted">この画面を再読み込みしても、つづきから確認できます。</p><div id="poll-error"></div></div>`,
+    `<div class="progress-layout"><span class="progress-flower" aria-hidden="true">✳</span>${badge()}<h1>${building ? "あなたらしい見せ方を、<br>組み立てています。" : "会社のことを、<br>ひとつずつ調べています。"}</h1><p class="muted">${building ? "採点を反映しながら、元の情報との対応を確認しています。" : "自社の情報と外部の情報を照らし合わせます。数分かかることがあります。"}</p><div class="progress-log" role="status" aria-live="polite">${building ? '<span><b>✓ 10件の採点を受け取りました</b></span><span class="working"><i class="mini-loader"></i>構成とデザインを検討しています</span><span>本文・リンク・パンくずを検査します</span>' : `<span class="${project.status === "crawling" ? "working" : ""}">${project.status === "crawling" ? '<i class="mini-loader"></i>' : "✓ "}公開ページを取得 ${project.progress?.pages ? `· ${project.progress.pages}ページ確認済み` : ""}</span><span class="${project.status === "researching" ? "working" : ""}">${project.status === "researching" ? '<i class="mini-loader"></i>' : ""}事業・競合・出典を調査</span><span>10件の参考サイトを整理</span>`}</div><p class="muted">${hosted ? "完了するまで、このページを開いたままお待ちください。" : "再読み込み後も、つづきから確認できます。"}</p><div id="poll-error"></div></div>`,
   );
   poll();
 }
@@ -133,7 +144,7 @@ function poll() {
       if (project.status === "complete") {
         tab = "preview";
         move("proposal");
-      } else if (project.status === "ready") move("research");
+      } else if (project.status === "ready") move("rating");
       else if (project.status === "error") move("error");
       else renderProgress();
     } catch (error) {
@@ -173,7 +184,7 @@ function renderRating() {
   const count = Object.keys(project.ratings).length;
   app.innerHTML = wrapper(
     1,
-    `<div class="page-heading"><div>${badge()}<span class="eyebrow">FIND YOUR KIND OF GOOD</span><h1>この雰囲気、どのくらい好き？</h1><p>理由はうまく言えなくても大丈夫。直感で1〜5点をつけてください。</p></div><button class="back-button" id="back-research">← 調査結果へ</button></div><div class="rating-layout"><div><article class="reference-card" id="swipe-card"><div class="reference-topline"><span>${e(ref.industry)}</span>${ref.url ? `<a href="${e(safeUrl(ref.url))}" target="_blank" rel="noopener noreferrer">実際のサイトを開く ↗</a>` : "<span>架空の参考デザイン</span>"}</div><div class="reference-preview" id="reference-preview">${project.mode === "demo" ? `<iframe src="/api/projects/${project.id}/reference?id=${ref.id}" title="${e(ref.name)}の参考デザイン" sandbox="" tabindex="-1"></iframe>` : `<img src="https://s.wordpress.com/mshots/v1/${encodeURIComponent(ref.url)}?w=1000" alt="${e(ref.name)}のサイトプレビュー" referrerpolicy="no-referrer"><div class="preview-fallback hidden">プレビューを取得できませんでした。<br><a href="${e(safeUrl(ref.url))}" target="_blank" rel="noopener noreferrer">実際のサイトを開いて確認 ↗</a></div>`}</div><div class="reference-caption"><div><h2>${e(ref.name)}</h2><p>${ref.url ? e(new URL(ref.url).hostname) : "SAMPLE DESIGN COLLECTION"}</p></div><div class="counter">${String(ratingIndex + 1).padStart(2, "0")}<span>/ 10</span></div></div></article><div class="score-area"><p class="score-prompt" id="score-prompt">あなたの「いい感じ」を教えてください。</p><div class="score-buttons" role="group" aria-labelledby="score-prompt">${[1, 2, 3, 4, 5].map((n) => `<button class="score-button ${project.ratings[ref.id]?.value === n ? "current" : ""}" data-score="${n}" aria-label="${n}点${n === 1 ? "：好みではない" : n === 5 ? "：とても好き" : ""}">${n}</button>`).join("")}</div><div class="score-legend"><span>好みではない</span><span>どちらでもない</span><span>とても好き</span></div></div><div id="rating-error"></div><div class="rating-bottom"><button class="back-button" id="previous-rating" ${ratingIndex === 0 ? "disabled" : ""}>↶ ひとつ前へ</button><span>1〜5キーでも採点できます</span></div></div><aside class="rating-sidebar"><div><span class="eyebrow">WHAT TO LOOK AT</span><h2>参考にしたいところ</h2><p>${e(ref.why)}</p><div class="swatch-row" aria-label="参考にする配色案">${Object.values(
+    `<div class="page-heading"><div>${badge()}<h1>この雰囲気、どのくらい好き？</h1><p>直感で1〜5点。10件選ぶと、新しいHPができます。</p></div><button class="back-button" id="back-research">← 調査結果へ</button></div><div class="rating-layout"><div><article class="reference-card" id="swipe-card"><div class="reference-topline"><span>${e(ref.industry)}</span>${ref.url ? `<a href="${e(safeUrl(ref.url))}" target="_blank" rel="noopener noreferrer">実際のサイトを開く ↗</a>` : "<span>架空の参考デザイン</span>"}</div><div class="reference-preview" id="reference-preview">${project.mode === "demo" ? `<iframe ${hosted ? `srcdoc="${e(engine.reference(project,ref))}"` : `src="/api/projects/${project.id}/reference?id=${ref.id}"`} title="${e(ref.name)}の参考デザイン" sandbox="" tabindex="-1"></iframe>` : `<img src="https://s.wordpress.com/mshots/v1/${encodeURIComponent(ref.url)}?w=1000" alt="${e(ref.name)}のサイトプレビュー" referrerpolicy="no-referrer"><div class="preview-fallback hidden">プレビューを取得できませんでした。<br><a href="${e(safeUrl(ref.url))}" target="_blank" rel="noopener noreferrer">実際のサイトを開いて確認 ↗</a></div>`}</div><div class="reference-caption"><div><h2>${e(ref.name)}</h2><p>${ref.url ? e(new URL(ref.url).hostname) : "SAMPLE DESIGN COLLECTION"}</p></div><div class="counter">${String(ratingIndex + 1).padStart(2, "0")}<span>/ 10</span></div></div></article><div class="score-area"><p class="score-prompt" id="score-prompt">あなたの「いい感じ」を教えてください。</p><div class="score-buttons" role="group" aria-labelledby="score-prompt">${[1, 2, 3, 4, 5].map((n) => `<button class="score-button ${project.ratings[ref.id]?.value === n ? "current" : ""}" data-score="${n}" aria-label="${n}点${n === 1 ? "：好みではない" : n === 5 ? "：とても好き" : ""}">${n}</button>`).join("")}</div><div class="score-legend"><span>好みではない</span><span>どちらでもない</span><span>とても好き</span></div></div><div id="rating-error"></div><div class="rating-bottom"><button class="back-button" id="previous-rating" ${ratingIndex === 0 ? "disabled" : ""}>↶ ひとつ前へ</button><span>1〜5キーでも採点できます</span></div></div><aside class="rating-sidebar"><div><span class="eyebrow">WHAT TO LOOK AT</span><h2>参考にしたいところ</h2><p>${e(ref.why)}</p><div class="swatch-row" aria-label="参考にする配色案">${Object.values(
       ref.colors,
     )
       .map((c) => `<span class="swatch" style="background:${hex(c)}"></span>`)
@@ -239,9 +250,9 @@ async function rate(value) {
       reason,
     });
     ratingIndex++;
-    move(Object.keys(project.ratings).length === 10 ? "summary" : "rating", {
-      scroll: false,
-    });
+    if (Object.keys(project.ratings).length === 10) {
+      await buildProposal();
+    } else move("rating", { scroll: false });
   } catch (error) {
     document.querySelector("#rating-error").innerHTML = errorBox(error.message);
     document
@@ -285,18 +296,23 @@ function renderSummary() {
         move("rating");
       }),
   );
-  document.querySelector("#build-button").onclick = async (event) => {
-    event.currentTarget.disabled = true;
-    try {
-      project = await api(`/api/projects/${project.id}/proposal`, {});
-      move(project.status === "complete" ? "proposal" : "progress");
-    } catch (error) {
-      document.querySelector("#summary-error").innerHTML = errorBox(
-        error.message,
-      );
-      document.querySelector("#build-button").disabled = false;
-    }
-  };
+  document.querySelector("#build-button").onclick = () => buildProposal();
+
+}
+async function buildProposal() {
+  const oldStatus=project.status;
+  project.status="building";
+  move("progress");
+  clearTimeout(pollTimer);
+  try {
+    project=await api(`/api/projects/${project.id}/proposal`,{});
+    tab="preview";selectedPage=0;
+    move(project.status==="complete"?"proposal":"progress");
+  } catch(error) {
+    project.status=oldStatus;
+    move("summary");
+    document.querySelector("#summary-error").innerHTML=errorBox(error.message);
+  }
 }
 function renderProposal() {
   const p = project.proposal,
@@ -307,7 +323,7 @@ function renderProposal() {
     2,
     `<div class="page-heading"><div>${badge()}<span class="eyebrow">YOUR NEXT CHAPTER</span><h1>${e(project.research.company.name)}の、新しい見せ方。</h1><p>${e(p.profile.summary)} · ${e(p.profile.confidence)}</p></div><a class="primary-button" href="/api/projects/${project.id}/download">提案をダウンロード ↓</a></div><nav class="proposal-tabs" aria-label="提案の表示"><button data-tab="preview" class="${tab === "preview" ? "active" : ""}" aria-current="${tab === "preview" ? "page" : "false"}">新しいHP</button><button data-tab="reason" class="${tab === "reason" ? "active" : ""}">変更の理由</button><button data-tab="audit" class="${tab === "audit" ? "active" : ""}">引き継ぎチェック</button></nav>${
       tab === "preview"
-        ? `<div class="proposal-toolbar"><select id="page-select" aria-label="プレビューするページ">${project.inventory.pages.map((page, i) => `<option value="${i}" ${i === selectedPage ? "selected" : ""}>${e(page.title)}</option>`).join("")}</select><div class="view-toggle" role="group" aria-label="画面サイズ"><button id="desktop-view" class="${!mobile ? "active" : ""}" aria-pressed="${!mobile}">PC</button><button id="mobile-view" class="${mobile ? "active" : ""}" aria-pressed="${mobile}">スマホ</button></div></div><div class="preview-stage"><iframe id="proposal-frame" class="proposal-frame ${mobile ? "mobile" : ""}" title="${e(page.title)}のリニューアル提案" src="/api/projects/${project.id}/preview?url=${encodeURIComponent(page.url)}" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe></div><p class="muted">確認用の仮サイトです。現在のサイトには反映されていません。</p>`
+        ? `<div class="proposal-toolbar"><select id="page-select" aria-label="プレビューするページ">${project.inventory.pages.map((page, i) => `<option value="${i}" ${i === selectedPage ? "selected" : ""}>${e(page.title)}</option>`).join("")}</select><div class="view-toggle" role="group" aria-label="画面サイズ"><button id="desktop-view" class="${!mobile ? "active" : ""}" aria-pressed="${!mobile}">PC</button><button id="mobile-view" class="${mobile ? "active" : ""}" aria-pressed="${mobile}">スマホ</button></div></div><div class="preview-stage"><iframe id="proposal-frame" class="proposal-frame ${mobile ? "mobile" : ""}" title="${e(page.title)}のリニューアル提案" ${hosted ? "" : `src="/api/projects/${project.id}/preview?url=${encodeURIComponent(page.url)}"`} sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe></div><p class="muted">確認用の仮サイトです。現在のサイトには反映されていません。</p>`
         : tab === "reason"
           ? `<div class="report-grid"><section class="panel"><h2>採点から反映したこと</h2><p>${e(p.profile.summary)}</p><p>デザインの方向：${e(p.theme.name)}</p><div class="swatch-row">${[p.theme.background, p.theme.foreground, p.theme.accent].map((c) => `<span class="swatch" style="background:${hex(c)}"></span>`).join("")}</div><p class="muted">${e(p.profile.confidence)}。会社を訪れる人の使いやすさは、公開後の成果と合わせて確かめます。</p></section><section class="panel"><h2>これから検証したいこと</h2><p>訪問者が事業を理解できるか、必要な情報を見つけられるか、相談先へ進めるか。</p><p class="muted">見た目の好み、検索での見つけやすさ、問い合わせの成果は別々に確認します。</p></section>${p.plan.pages.map((page) => `<section class="panel wide"><h2>${e(project.inventory.pages.find((x) => x.url === page.url)?.title)}</h2><p>${e(page.rationale)}</p><div class="recommendation-grid">${page.improvements.map((x, i) => `<article class="recommendation"><span>0${i + 1}</span><h3>${e(x.title)}</h3><p>${e(x.detail)}</p>${citations(x.sourceUrls)}</article>`).join("")}</div></section>`).join("")}</div>`
           : `<div class="panel"><span class="${a.passed ? "pass-chip" : "sample-badge"}">${a.passed ? "✓ 取得した本文の保持を確認" : "確認が必要な項目があります"}</span><h2 style="margin-top:20px">引き継げた範囲を、見える形に。</h2><p>${e(a.scope)}を対象に確認しています。サイト全体の完全な移植を保証するものではありません。</p><div class="audit-grid">${[
@@ -323,7 +339,7 @@ function renderProposal() {
               .join(
                 "",
               )}</div><ul class="audit-details"><li>取得できていない・未巡回のURL：${a.unfetched}件</li><li>元ページで確認したフォーム：${a.forms}件。送信機能は元サイトを参照します。</li>${a.notes.map((note) => `<li>${e(note)}</li>`).join("")}${a.failures.map((note) => `<li>${e(note)}</li>`).join("")}</ul>${project.inventory.errors.length ? `<details><summary>取得できなかったページ</summary><ul class="audit-details">${project.inventory.errors.map((x) => `<li>${e(x.url)} — ${e(x.reason)}</li>`).join("")}</ul></details>` : ""}<p class="muted">検査日時：${e(new Date(a.checkedAt).toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }))}（日本時間）</p></div>`
-    }<section class="review-banner"><div><h3>この方向、どうですか？</h3><p>採用したい点や直したい点を、この提案に残せます。</p><textarea id="feedback-note" aria-label="提案へのコメント" maxlength="1000" placeholder="例：余白は好き。文字をもう少し大きくしたい。">${e(project.feedback?.note || "")}</textarea></div><button class="secondary-button" data-feedback="accepted">この方向で進めたい ✓</button><button class="secondary-button" data-feedback="needs_changes">調整したい</button></section><div class="bottom-actions"><button class="back-button" id="back-ratings">← 好みを見直す</button><button class="back-button" id="back-research">調査結果を見る</button><button class="danger-button" id="delete-project">この提案を削除</button></div>`,
+    }<section class="review-banner"><div><h3>この方向、どうですか？</h3><p>直したい点を書いて、もう一度つくれます。</p><textarea id="feedback-note" aria-label="提案へのコメント" maxlength="1000" placeholder="例：余白は好き。文字をもう少し大きくしたい。">${e(project.feedback?.note || "")}</textarea></div><button class="secondary-button" data-feedback="accepted">この方向で進めたい ✓</button><button class="secondary-button" data-feedback="needs_changes">コメントを反映して作り直す</button></section><div class="bottom-actions"><button class="back-button" id="back-ratings">← 好みを見直す</button><button class="back-button" id="back-research">調査結果を見る</button><button class="danger-button" id="delete-project">この提案を削除</button></div>`,
   );
   document.querySelectorAll("[data-tab]").forEach(
     (b) =>
@@ -332,7 +348,12 @@ function renderProposal() {
         renderProposal();
       }),
   );
+  if(hosted) {
+    const download=document.querySelector('a[href$="/download"]');
+    download.onclick=event=>{event.preventDefault();engine.download(project);};
+  }
   if (tab === "preview") {
+    if(hosted)engine.mountPreview(document.querySelector("#proposal-frame"),project,page);
     document.querySelector("#page-select").onchange = (event) => {
       selectedPage = Number(event.target.value);
       renderProposal();
@@ -359,7 +380,9 @@ function renderProposal() {
             note,
           });
           project.feedback = { decision: b.dataset.feedback, note };
-          toast("コメントを保存しました。");
+          if(b.dataset.feedback === "needs_changes") {
+            await buildProposal();
+          } else toast("コメントを保存しました。");
         } catch (error) {
           toast(error.message);
         } finally {
@@ -418,8 +441,10 @@ resume.onclick = async () => {
   try {
     project = await api(`/api/projects/${savedId}`);
     if (project.status === "complete") move("proposal");
-    else if (project.status === "ready")
-      move(Object.keys(project.ratings).length === 10 ? "summary" : "research");
+    else if (project.status === "ready") {
+      ratingIndex=project.research.references.findIndex(r=>!project.ratings[r.id]);
+      move(ratingIndex<0?"summary":"rating");
+    }
     else move(project.status === "error" ? "error" : "progress");
   } catch (error) {
     toast(error.message);
@@ -436,3 +461,8 @@ document.querySelector(".brand").onclick = (event) => {
   move("home");
 };
 render();
+
+if (new URLSearchParams(location.search).has("preview")) {
+  history.replaceState(null,"",location.pathname);
+  await start({mode:"demo"},document.querySelector("#sample-button"));
+}

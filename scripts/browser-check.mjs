@@ -29,11 +29,7 @@ await page.screenshot({
   path: artifactRoot + "/home-desktop.png",
   fullPage: true,
 });
-await page.getByRole("button", { name: "まずはサンプルで体験する" }).click();
-await page
-  .getByRole("heading", { name: "こもれび設計室の、今とこれから。" })
-  .waitFor();
-await page.getByRole("button", { name: "好みを選びにいく" }).click();
+await page.getByRole("button", { name: "プレビューを見る" }).click();
 await page.locator("#reference-preview iframe").waitFor();
 await page.waitForTimeout(200);
 await page.screenshot({
@@ -52,7 +48,6 @@ for (let i = 0; i < 10; i++) {
       i + 2,
     );
 }
-await page.getByRole("button", { name: "この好みで、新しいHPを見る" }).click();
 await page
   .getByRole("heading", { name: "こもれび設計室の、新しい見せ方。" })
   .waitFor();
@@ -88,11 +83,9 @@ await (await download).saveAs(artifactRoot + "/demo-proposal.zip");
 await page
   .getByLabel("提案へのコメント")
   .fill("余白は好き。文字をもう少し大きくしたい。");
-await page.getByRole("button", { name: "調整したい", exact: true }).click();
-await page
-  .getByRole("status")
-  .filter({ hasText: "コメントを保存しました。" })
-  .waitFor();
+await page.getByRole("button", { name: "コメントを反映して作り直す", exact: true }).click();
+await page.locator("#proposal-frame").waitFor();
+await page.waitForFunction(()=>document.querySelector("#proposal-frame")?.contentDocument?.body && getComputedStyle(document.querySelector("#proposal-frame").contentDocument.body).fontSize === "18px");
 await page.reload();
 await page.getByRole("button", { name: "つづきから" }).click();
 await page

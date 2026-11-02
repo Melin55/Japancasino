@@ -1,5 +1,6 @@
-import { createHash } from "node:crypto";
-import { load } from "cheerio";
+import { sha256 } from "@noble/hashes/sha2.js";
+import { bytesToHex } from "@noble/hashes/utils.js";
+import { load } from "cheerio/slim";
 
 export const dimensions = {
   warmth: "あたたかさ",
@@ -110,7 +111,7 @@ export function relativeFile(url) {
   if (u.search)
     file = file.replace(
       /\.html$/,
-      `-${createHash("sha256").update(u.search).digest("hex").slice(0, 8)}.html`,
+      `-${bytesToHex(sha256(new TextEncoder().encode(u.search))).slice(0, 8)}.html`,
     );
   return file;
 }
@@ -229,7 +230,7 @@ export function renderPage(
     .map((a) => `<span id="${e(a)}"></span>`)
     .join(
       "",
-    )}${breadcrumbs ? `<nav class="breadcrumbs" aria-label="パンくず">${breadcrumbs}</nav>` : ""}<section class="hero"><div><span class="eyebrow">${e(project.research.company.name)}</span>${titleBlock ? `<h1 ${titleBlock.anchor ? `id="${e(titleBlock.anchor)}"` : ""} data-block-id="${e(titleBlock.id)}">${e(titleBlock.text)}</h1>` : `<h1>${e(page.title)}</h1>`}<a class="original" href="${e(page.url)}" target="_blank" rel="noopener noreferrer">元のページを見る ↗</a></div>${heroImg ? `<img src="${e(heroImg.src)}" alt="${e(heroImg.alt)}" referrerpolicy="no-referrer">` : ""}</section>${sections.map((items) => `<section class="section">${items.map((b) => `<${b.tag === "h1" ? "h2" : b.tag} ${b.anchor ? `id="${e(b.anchor)}"` : ""} data-block-id="${e(b.id)}">${e(b.text)}</${b.tag === "h1" ? "h2" : b.tag}>`).join("")}</section>`).join("")}${
+    )}${breadcrumbs ? `<nav class="breadcrumbs" aria-label="パンくず">${breadcrumbs}</nav>` : ""}<section class="hero"><div><span class="eyebrow">${e(project.research.company.name)}</span>${titleBlock ? `<h1 ${titleBlock.anchor ? `id="${e(titleBlock.anchor)}"` : ""} data-block-id="${e(titleBlock.id)}">${e(titleBlock.text)}</h1>` : `<h1>${e(page.title)}</h1>`}${project.mode === "demo" ? "" : `<a class="original" href="${e(page.url)}" target="_blank" rel="noopener noreferrer">元のページを見る ↗</a>`}</div>${heroImg ? `<img src="${e(heroImg.src)}" alt="${e(heroImg.alt)}" referrerpolicy="no-referrer">` : ""}</section>${sections.map((items) => `<section class="section">${items.map((b) => `<${b.tag === "h1" ? "h2" : b.tag} ${b.anchor ? `id="${e(b.anchor)}"` : ""} data-block-id="${e(b.id)}">${e(b.text)}</${b.tag === "h1" ? "h2" : b.tag}>`).join("")}</section>`).join("")}${
     page.images.length > 1
       ? `<div class="gallery">${page.images
           .slice(1)

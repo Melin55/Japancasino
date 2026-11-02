@@ -1,11 +1,12 @@
-import { load } from "cheerio";
-import { createHash } from "node:crypto";
+import { load } from "cheerio/slim";
+import { sha256 } from "@noble/hashes/sha2.js";
+import { bytesToHex } from "@noble/hashes/utils.js";
 import robotsParser from "robots-parser";
 import { publicFetch, normalizeUrl, UserError } from "./network.js";
 
 const clean = (text) => text.replace(/\s+/g, " ").trim();
 const hash = (text) =>
-  createHash("sha256").update(text).digest("hex").slice(0, 16);
+  bytesToHex(sha256(new TextEncoder().encode(text))).slice(0, 16);
 export function safeLink(value, base) {
   try {
     const u = new URL(value, base);
@@ -119,7 +120,7 @@ export function extractPage(html, url) {
     }
     flush();
   }
-  const body = $("body")[0];
+  const body = $("body")[0] || $.root()[0];
   if (body) walk(body);
   const truncated =
     blocks.length > 500 || images.length > 50 || links.length > 500;
