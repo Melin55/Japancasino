@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "company": {"name": "架空デモ株式会社（実調査ではありません）", "website": "https://example.com"},
+  "researched_at": "2026-11-03T09:00:00+09:00",
+  "research": {
+    "status": "partial",
+    "limitations": ["形式の動作確認用の架空データです。実在する企業の調査結果ではありません。", "ロゴと利用条件は未確認です。"]
+  },
+  "sources": [
+    {"id": "demo-guide", "title": "架空のブランドガイド（形式例）", "url": "https://example.com/brand", "kind": "official", "accessed_at": "2026-11-03T09:00:00+09:00"},
+    {"id": "demo-site", "title": "架空の公式サイト（形式例）", "url": "https://example.com", "kind": "official", "accessed_at": "2026-11-03T09:00:00+09:00"}
+  ],
+  "colors": [
+    {"token": "primary", "label": "メインカラー", "value": "#174E45", "status": "official", "source_ids": ["demo-guide"], "note": "架空の値。ガイドに明示されている場合の記入例。"},
+    {"token": "accent", "label": "アクセント候補", "value": "#E6BB68", "status": "inferred", "source_ids": ["demo-site"], "note": "架空の提案。確定したCSSトークンには含めない。"}
+  ],
+  "typography": [
+    {"token": "body", "label": "本文書体", "value": ["Noto Sans JP", "sans-serif"], "status": "observed", "source_ids": ["demo-site"], "note": "架空のCSS観測例。配信の有無・ライセンスはこの例では確認していない。"}
+  ],
+  "logos": [
+    {"token": "primary", "label": "公式ロゴ", "value": null, "status": "unknown", "source_ids": [], "note": "架空データのためアセットを指定しない。利用条件は未確認。"}
+  ],
+  "voice": [
+    {"token": "tone", "label": "文体", "value": "短く具体的に、丁寧語で説明する。", "status": "observed", "source_ids": ["demo-site"], "note": "架空の観測例。正式なライティングガイドではない。"}
+  ],
+  "rules": [
+    {"token": "spacing", "label": "余白の提案", "value": "本文と図版の間に十分な余白を置く。", "status": "inferred", "source_ids": ["demo-site"], "note": "架空の制作提案。公式の余白規定ではない。"}
+  ]
+}

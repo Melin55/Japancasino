@@ -1,0 +1,4 @@
+interface:
+  display_name: "ブランド調査"
+  short_description: "会社名・URLから出典付きのブランドハーネスを生成"
+  default_prompt: "$brand-research を使って、指定した会社の公開情報からブランドカラー・書体・ロゴ・言葉遣いを調べ、制作に使うファイルへまとめてください。"
