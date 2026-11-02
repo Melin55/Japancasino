@@ -37,3 +37,15 @@
 - 自動テスト13件：既存11件に加え、Workerの配信・認証・キー未設定・出典付きfixture処理・所有者違い・署名改変拒否を確認。実OpenAIリクエストは未実行。
 - PC1440px・スマホ390pxで採点、3ページの提案、内側のナビ、保持チェック、ZIP、修正再生成、再読込後再開を検査。
 - 端末間同期、永続的な課金枠、一般公開運用は対象外。公開は所有者向けテストとして扱う。
+
+### 公開結果
+
+- 2026-11-02T11:49:36Z にSitesの公開処理 `succeeded` を確認。
+- URL: https://iikanji-hp-melin55.dotdeli-biz.chatgpt.site/?preview=1
+- Site: `appgprj_6ae8766b0bc48191a9fa6462385c1f0c`
+- Version: `appgprj_6ae8766b0bc48191a9fa6462385c1f0c~appgver_ecce79fb21b881919f7b646968d08216`
+- Deployment: `appgdep_6ae878c51cb08191972c586200b2b809`
+- 公開元コミット: `9bd9b74af87e9edce1cd6dabc90f530f72be6ef9`（Sites専用ソース）。GitHubの実装コミット: `24efc26e741d2cd3191a638018be6af0b94255b4`。
+- 配布tarは `.openai/hosting.json` と `dist/server/index.js` をルート相対で含む。
+- 最終ブラウザー検査: エラー0、スマホ横幅390px/内容390px。
+- 実AI調査はキー接続待ち。所有者限定から一般公開への変更は実施していない。
