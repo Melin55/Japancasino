@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>動画素材を録画</title>
+<style>
+body{font:16px/1.8 system-ui,sans-serif;background:#f4f5f7;color:#18212b;margin:0;padding:32px}main{max-width:800px;margin:auto;background:white;padding:28px;border-radius:16px}h1{font-size:26px;margin:0}button,a.download{padding:12px 20px;border:0;border-radius:8px;font:inherit;background:#124d80;color:white;cursor:pointer;text-decoration:none;display:inline-block}button:disabled{opacity:.4;cursor:default}.buttons{display:flex;gap:10px;flex-wrap:wrap}video{width:100%;max-height:360px;background:#141a20;margin-top:16px}#status{font-weight:600}small{color:#586473}meter{width:180px}a{color:#124d80}[hidden]{display:none!important}
+</style>
+<main>
+<h1>動画素材を録画</h1>
+<p>Chromeで再生しているタブの映像と音声を、そのまま保存します。録画データはこの端末内に保持され、外部へ自動送信されません。</p>
+<ol>
+<li>別タブで動画を開き、画質を1080pに設定して、必要な場面の直前で一時停止。</li>
+<li>「録画するタブを選ぶ」を押し、<strong>動画のタブ</strong>を選択。「タブの音声を共有」をオンにします。</li>
+<li>音声メーターを確認後、「録画開始」を押して元の動画を再生。終了したら「停止して確認」。</li>
+</ol>
+<p><a href="https://www.youtube.com/watch?v=hGfcVkkqxYg" target="_blank" rel="noopener">校長インタビューを開く</a> · <a href="https://www.youtube.com/watch?v=H8mRwjDYKnc" target="_blank" rel="noopener">MBS取材を開く</a></p>
+<div class="buttons"><button id="choose">録画するタブを選ぶ</button><button id="start" disabled>録画開始</button><button id="stop" disabled>停止して確認</button></div>
+<p id="status" role="status" aria-live="polite">録画するタブを選んでください。</p>
+<p>音声の入力 <meter id="level" min="0" max="1" value="0"></meter> <span id="timer">00:00</span></p>
+<video id="preview" muted autoplay playsinline></video>
+<p><a class="download" id="save" hidden>WebMを保存</a></p>
+<small>1回最大10分。最初は10秒ほど録画し、停止後にプレーヤーで声が聞こえるか確認してください。録画中は元動画を再生したままにし、広告や他の人の声が混ざった区間は後で除外します。画面録画の画質は再生画質と画面サイズに依存します。</small>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+let stream, recorder, chunks=[], url, audioContext, animation, clock, started, failed=false;
+function tracksOff(){stream?.getTracks().forEach(t=>t.stop());stream=null;cancelAnimationFrame(animation);audioContext?.close().catch(()=>{});audioContext=null;$('level').value=0;}
+function finish(){if(recorder?.state==='recording')recorder.stop();}
+function resetPreview(){if(url)URL.revokeObjectURL(url);url=null;$('save').hidden=true;$('preview').controls=false;$('preview').muted=true;}
+$('choose').onclick=async()=>{
+  if(!navigator.mediaDevices?.getDisplayMedia||!window.MediaRecorder){$('status').textContent='Chromeで開いてください。動作しない場合は、付属手順でlocalhostから開いてください。';return;}
+  $('choose').disabled=true;tracksOff();resetPreview();
+  try{
+    stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:30,max:30},width:{ideal:1920},height:{ideal:1080}},audio:true,selfBrowserSurface:'exclude',preferCurrentTab:false});
+    if(!stream.getAudioTracks().length)throw new Error('音声が共有されていません。Chromeの「タブ」を選び、「タブの音声を共有」をオンにして選び直してください。');
+    $('preview').srcObject=stream;
+    audioContext=new AudioContext();await audioContext.resume();
+    const analyser=audioContext.createAnalyser();analyser.fftSize=1024;
+    audioContext.createMediaStreamSource(stream).connect(analyser);
+    const values=new Uint8Array(analyser.fftSize);
+    function meter(){analyser.getByteTimeDomainData(values);let energy=0;for(const v of values)energy+=((v-128)/128)**2;$('level').value=Math.min(1,Math.sqrt(energy/values.length)*5);animation=requestAnimationFrame(meter);}
+    meter();
+    stream.getVideoTracks()[0].addEventListener('ended',()=>{if(recorder?.state==='recording'){finish();}else{tracksOff();$('start').disabled=true;$('status').textContent='タブの共有が終了しました。選び直してください。';}});
+    $('start').disabled=false;$('status').textContent='音声トラックを確認しました。元動画を短く再生してメーターの動きを確認できます。';
+  }catch(e){tracksOff();$('start').disabled=true;$('status').textContent=e.name==='NotAllowedError'?'共有がキャンセルされたか、ブラウザの許可が必要です。':e.message;}
+  finally{$('choose').disabled=false;}
+};
+$('start').onclick=()=>{
+  if(!stream?.getVideoTracks().some(t=>t.readyState==='live'))return;
+  const mime=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(x=>MediaRecorder.isTypeSupported(x));
+  if(!mime){$('status').textContent='このブラウザはWebM録画に対応していません。Chromeを使用してください。';return;}
+  try{
+    recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:8000000,audioBitsPerSecond:192000});chunks=[];failed=false;resetPreview();
+    recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
+    recorder.onerror=()=>{failed=true;$('status').textContent='録画中にエラーが発生しました。短い録画で再試行してください。';finish();};
+    recorder.onstop=()=>{
+      clearInterval(clock);tracksOff();$('preview').srcObject=null;$('start').disabled=true;$('stop').disabled=true;$('choose').disabled=false;
+      if(failed||!chunks.length){$('status').textContent='録画を保存できませんでした。タブを選び直してください。';return;}
+      const blob=new Blob(chunks,{type:recorder.mimeType});chunks=[];url=URL.createObjectURL(blob);
+      $('preview').src=url;$('preview').autoplay=false;$('preview').controls=true;$('preview').muted=false;
+      $('save').href=url;$('save').download='oiwane-reference-'+new Date().toISOString().replace(/[:.]/g,'-')+'.webm';$('save').hidden=false;
+      $('status').textContent='録画完了。再生して声を確認し、「WebMを保存」を押してください。';
+    };
+    recorder.start(1000);started=Date.now();$('start').disabled=true;$('choose').disabled=true;$('stop').disabled=false;$('status').textContent='録画中です。元のタブで動画を再生してください。';
+    clock=setInterval(()=>{const sec=Math.floor((Date.now()-started)/1000);$('timer').textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');if(sec>=600)finish();},500);
+  }catch(e){$('status').textContent='録画を開始できませんでした: '+e.message;}
+};
+$('stop').onclick=finish;
+window.addEventListener('beforeunload',e=>{if(recorder?.state==='recording'||url){e.preventDefault();e.returnValue='';}});
+</script>
+</html>
