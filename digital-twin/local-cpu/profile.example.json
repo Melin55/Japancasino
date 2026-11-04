@@ -1,0 +1,10 @@
+{
+  "gpt_sovits_root": "/path/to/GPT-SoVITS",
+  "sadtalker_root": "/path/to/SadTalker",
+  "portrait": "../private/frontal-reference.png",
+  "reference_audio": "../private/voice-reference.wav",
+  "reference_text": "../private/reference-text.txt",
+  "face_size": 512,
+  "threads": 4,
+  "bf16": false
+}
