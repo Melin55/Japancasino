@@ -2,6 +2,8 @@
 
 YouTube実ファイルは未取得。403の拒否元をHTTPSのCONNECT応答まで確認した。
 
+現在の収集対象は2023年11月4日〜2026年11月4日の映像・音声のみ。[recent-sources.csv](recent-sources.csv)の5本は公開・放送日が期間内の候補。採用場面の撮影時期は別途確認し、日付不明・期間外の素材と古い映像の再投稿は採用しない。
+
 | 確認対象 | 結果 |
 | --- | --- |
 | www.youtube.com:443 | 実行環境のプロキシが403、本文 `Domain forbidden`。YouTubeへのTLS接続前に拒否 |

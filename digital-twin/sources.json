@@ -33,7 +33,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "unverified"
     },
     {
       "id": "V02",
@@ -50,7 +56,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "within_window",
+      "current_media_candidate": true,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "publication_or_broadcast_metadata"
     },
     {
       "id": "V03",
@@ -67,7 +79,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "within_window",
+      "current_media_candidate": true,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "publication_or_broadcast_metadata"
     },
     {
       "id": "V04",
@@ -84,7 +102,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "unverified"
     },
     {
       "id": "V05",
@@ -101,7 +125,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "unverified"
     },
     {
       "id": "V06",
@@ -118,7 +148,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "within_window",
+      "current_media_candidate": true,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "publication_or_broadcast_metadata"
     },
     {
       "id": "V07",
@@ -135,7 +171,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "within_window",
+      "current_media_candidate": true,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "publication_or_broadcast_metadata"
     },
     {
       "id": "V08",
@@ -152,7 +194,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "within_window",
+      "current_media_candidate": true,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "publication_or_broadcast_metadata"
     },
     {
       "id": "V09",
@@ -169,7 +217,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "unverified"
     },
     {
       "id": "V10",
@@ -186,7 +240,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "unverified"
     },
     {
       "id": "V11",
@@ -203,7 +263,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "unverified"
     },
     {
       "id": "S01",
@@ -220,7 +286,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "unverified"
     },
     {
       "id": "S02",
@@ -237,7 +309,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "unverified"
     },
     {
       "id": "S03",
@@ -254,7 +332,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false
     },
     {
       "id": "A01",
@@ -271,7 +351,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "outside_window",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "publication_or_broadcast_metadata"
     },
     {
       "id": "A02",
@@ -288,7 +374,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "outside_window",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "publication_or_broadcast_metadata"
     },
     {
       "id": "A03",
@@ -305,7 +397,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "outside_window",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "publication_or_broadcast_metadata"
     },
     {
       "id": "A04",
@@ -322,7 +420,13 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "outside_window",
+      "current_media_candidate": false,
+      "recorded_date": null,
+      "recording_date_verified": false,
+      "eligible_for_training": false,
+      "date_basis": "publication_or_broadcast_metadata"
     },
     {
       "id": "R01",
@@ -339,7 +443,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false
     },
     {
       "id": "R02",
@@ -356,7 +462,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false
     },
     {
       "id": "R03",
@@ -373,7 +481,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false
     },
     {
       "id": "R04",
@@ -390,7 +500,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "outside_window",
+      "current_media_candidate": false
     },
     {
       "id": "R05",
@@ -407,7 +519,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "outside_window",
+      "current_media_candidate": false
     },
     {
       "id": "R06",
@@ -424,7 +538,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "outside_window",
+      "current_media_candidate": false
     },
     {
       "id": "R07",
@@ -441,7 +557,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "outside_window",
+      "current_media_candidate": false
     },
     {
       "id": "R08",
@@ -458,7 +576,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false
     },
     {
       "id": "R09",
@@ -475,7 +595,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false
     },
     {
       "id": "H01",
@@ -492,7 +614,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false
     },
     {
       "id": "H02",
@@ -509,7 +633,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false
     },
     {
       "id": "H03",
@@ -526,7 +652,9 @@
       "audiovisually_reviewed": false,
       "usable_speech_seconds": null,
       "third_party_reuse_permission": "not_verified",
-      "checked_on": "2026-11-04"
+      "checked_on": "2026-11-04",
+      "date_scope_status": "date_unverified",
+      "current_media_candidate": false
     }
   ],
   "excluded_or_separate_speakers": [
@@ -570,5 +698,12 @@
       "title": "大岩根正隆選手",
       "reason": "同姓の別人。対象から除外。"
     }
-  ]
+  ],
+  "selection_policy": {
+    "start_date": "2023-11-04",
+    "end_date": "2026-11-04",
+    "timezone": "Asia/Tokyo",
+    "requirement": "直近3年の映像・音声のみ。期間外と日付未確認は採用しない。期間内公開でも古い撮影素材の再投稿は除外。",
+    "date_check": "公開・放送日で候補を絞り、採用区間の撮影時期を別途確認する。"
+  }
 }
