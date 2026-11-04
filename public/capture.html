@@ -9,6 +9,7 @@ body{font:16px/1.8 system-ui,sans-serif;background:#f4f5f7;color:#18212b;margin:
 <main>
 <h1>動画素材を録画</h1>
 <p>Chromeで再生しているタブの映像と音声を、そのまま保存します。録画データはこの端末内に保持され、外部へ自動送信されません。</p>
+<p><strong>このHTMLをMacに保存し、Finderから「このアプリケーションで開く → Google Chrome」で開いてください。</strong>ChatGPT内のプレビューや埋め込み画面では、共有を許可できない場合があります。</p>
 <ol>
 <li>別タブで動画を開き、画質を1080pに設定して、必要な場面の直前で一時停止。</li>
 <li>「録画するタブを選ぶ」を押し、<strong>動画のタブ</strong>を選択。「タブの音声を共有」をオンにします。</li>
@@ -24,6 +25,20 @@ body{font:16px/1.8 system-ui,sans-serif;background:#f4f5f7;color:#18212b;margin:
 </ul>
 <div class="buttons"><button id="choose">録画するタブを選ぶ</button><button id="start" disabled>録画開始</button><button id="stop" disabled>停止して確認</button></div>
 <p id="status" role="status" aria-live="polite">録画するタブを選んでください。</p>
+<aside id="share-help" hidden>
+<p><strong>共有できない場合</strong></p>
+<ol>
+<li>録画ページとYouTubeを、MacのGoogle Chromeの別々のタブで開きます。</li>
+<li>共有選択が出た場合は「Chrome タブ」で動画を選び、「タブの音声を共有」をオンにして「共有」を押します。</li>
+<li>Macから画面収録の許可を求められた場合は、<strong>システム設定 → プライバシーとセキュリティ → 画面収録とシステムオーディオ録音</strong>でGoogle Chromeを許可します。再起動を求められたらChromeを終了して開き直します。</li>
+</ol>
+<p>共有選択をキャンセルした場合も同じ種類のエラーになります。キャンセルしていなければ、上の開き方と権限を確認してください。</p>
+<details><summary>それでも共有できない場合</summary>
+<p>下の確認用情報を、このチャットに貼り付けてください。ページから自動送信はしません。</p>
+<pre id="share-error" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre>
+<p>ローカルファイルで動かない場合は、HTMLを置いたフォルダーで <code>python3 -m http.server 8000 --bind 127.0.0.1</code> を実行し、Chromeで <code>http://127.0.0.1:8000/</code> からHTMLを開きます。Python 3が入っている場合の手順です。</p>
+</details>
+</aside>
 <p>音声の入力 <meter id="level" min="0" max="1" value="0"></meter> <span id="timer">00:00</span></p>
 <video id="preview" muted autoplay playsinline></video>
 <p><a class="download" id="save" hidden>WebMを保存</a></p>
@@ -35,9 +50,19 @@ let stream, recorder, chunks=[], url, audioContext, animation, clock, started, f
 function tracksOff(){stream?.getTracks().forEach(t=>t.stop());stream=null;cancelAnimationFrame(animation);audioContext?.close().catch(()=>{});audioContext=null;$('level').value=0;}
 function finish(){if(recorder?.state==='recording')recorder.stop();}
 function resetPreview(){if(url)URL.revokeObjectURL(url);url=null;$('save').hidden=true;$('preview').controls=false;$('preview').muted=true;}
+function shareError(message,error){
+  $('status').textContent=message;$('share-help').hidden=false;
+  $('share-error').textContent=['エラー: '+(error?.name||'事前確認'),error?.message||'',
+    '安全なページ: '+(window.isSecureContext?'はい':'いいえ'),
+    '埋め込み画面: '+(window.self!==window.top?'はい':'いいえ')].filter(Boolean).join('\n');
+}
 $('choose').onclick=async()=>{
-  if(!navigator.mediaDevices?.getDisplayMedia||!window.MediaRecorder){$('status').textContent='Chromeで開いてください。動作しない場合は、付属手順でlocalhostから開いてください。';return;}
-  $('choose').disabled=true;tracksOff();resetPreview();
+  $('share-help').hidden=true;$('share-error').textContent='';
+  if(!window.isSecureContext){shareError('この開き方では画面共有を利用できません。保存したHTMLをChromeで直接開くか、下のlocalhostの手順を使ってください。');return;}
+  if(!navigator.mediaDevices?.getDisplayMedia||!window.MediaRecorder){shareError('この画面ではタブ録画を利用できません。HTMLを保存して、MacのGoogle Chromeで直接開いてください。');return;}
+  const policy=document.permissionsPolicy||document.featurePolicy;
+  if(policy?.allowsFeature&&policy.allowsFeature('display-capture')===false){shareError('この表示画面では画面共有が許可されていません。HTMLを保存し、MacのGoogle Chromeで直接開いてください。');return;}
+  $('choose').disabled=true;$('start').disabled=true;tracksOff();resetPreview();
   try{
     stream=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:30,max:30},width:{ideal:1920},height:{ideal:1080}},audio:true,selfBrowserSurface:'exclude',preferCurrentTab:false});
     if(!stream.getAudioTracks().length)throw new Error('音声が共有されていません。Chromeの「タブ」を選び、「タブの音声を共有」をオンにして選び直してください。');
@@ -50,7 +75,17 @@ $('choose').onclick=async()=>{
     meter();
     stream.getVideoTracks()[0].addEventListener('ended',()=>{if(recorder?.state==='recording'){finish();}else{tracksOff();$('start').disabled=true;$('status').textContent='タブの共有が終了しました。選び直してください。';}});
     $('start').disabled=false;$('status').textContent='音声トラックを確認しました。元動画を短く再生してメーターの動きを確認できます。';
-  }catch(e){tracksOff();$('start').disabled=true;$('status').textContent=e.name==='NotAllowedError'?'共有がキャンセルされたか、ブラウザの許可が必要です。':e.message;}
+  }catch(e){
+    tracksOff();$('start').disabled=true;
+    const messages={
+      NotAllowedError:'タブの共有を開始できませんでした。このエラーだけでは、キャンセル・Macの権限・埋め込み画面の制限を区別できません。下の手順を確認してください。',
+      NotReadableError:'選んだ画面を読み取れませんでした。Macの画面収録の権限を確認し、Chromeを開き直して選び直してください。',
+      InvalidStateError:'録画ページを手前に表示し、「録画するタブを選ぶ」をもう一度クリックしてください。',
+      AbortError:'共有の開始が中断されました。録画ページを再読み込みして、もう一度タブを選んでください。',
+      SecurityError:'この画面の設定では共有を開始できません。HTMLを保存し、Google Chromeで直接開いてください。'
+    };
+    shareError(messages[e.name]||e.message,e);
+  }
   finally{$('choose').disabled=false;}
 };
 $('start').onclick=()=>{
