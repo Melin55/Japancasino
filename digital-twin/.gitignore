@@ -1,0 +1,7 @@
+.env
+.env.*
+profile.json
+private/
+output/
+__pycache__/
+*.pyc
