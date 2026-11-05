@@ -19,6 +19,11 @@ draw.text((539,292),'日本カジノスクール 大岩根校長',font=namefont,
 draw.text((540,390),cfg.get('headline1','初めてでも大丈夫'),font=headline,fill=(25,25,25),anchor='mm')
 draw.text((540,461),cfg.get('headline2','基本から、一緒に。'),font=headline,fill=(25,25,25),anchor='mm')
 draw.rounded_rectangle((770,535,1030,580),radius=12,fill=(255,255,255,235));draw.text((900,556),'AI生成サンプル',font=label,fill=(30,50,45),anchor='mm')
+if cfg.get('title_overlay'):
+ overlay_path=Path(cfg['title_overlay']).expanduser()
+ if not overlay_path.is_absolute():overlay_path=args.profile.resolve().parent/overlay_path
+ header=Image.open(overlay_path).convert('RGBA')
+ if header.size!=(1080,1920):raise ValueError('title_overlay must be 1080x1920 RGBA')
 hrgba=np.asarray(header);hcol=cv2.cvtColor(hrgba[:,:,:3],cv2.COLOR_RGB2BGR);ha=hrgba[:,:,3:4]/255.0
 
 def writer(path,pix,codec):

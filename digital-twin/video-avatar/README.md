@@ -55,7 +55,7 @@ python run.py --profile profile.json --script private/script.txt --out output/sa
 
 ## 動き・音・解像感の修正
 
-元動画にジャンプカットがある場合、口元だけの生成では姿勢の飛びが残ります。最新版の見本では元動画の59.60〜64.84秒の連続区間を使用し、往復再生の折り返しを数フレームで丸めた10.72秒の動作素材を作りました。その後に新しい口元を生成するため、発話音声を逆再生することはありません。往復させた身振りを使う構成であり、台本に応じた新しい全身動作の生成ではありません。
+元動画にジャンプカットがある場合、口元だけの生成では姿勢の飛びが残ります。v5の見本では元動画の59.60〜64.84秒の連続区間を使用し、往復再生の折り返しを数フレームで丸めた10.72秒の動作素材を作りました。その後に新しい口元を生成するため、発話音声を逆再生することはありません。往復させた身振りを使う構成であり、台本に応じた新しい全身動作の生成ではありません。
 
 音声は既存の10.7秒の合成音声に、FoxJoyのONNX dereverb、DeepFilterNet3（抑制上限12dB、遅延補償あり）、65Hzハイパスと音量調整を適用しました。反響分離モデル単独の変化が小さかったため、音声ノイズ抑制も併用しています。台詞の変更や話速変更はしていません。処理後のASRでも元の台詞と一致しました。利用依存は `onnxruntime==1.19.2`、`deepfilternet==0.5.6`、既存のTorch CPU環境です。外部モデルは別途必要です。
 
@@ -66,3 +66,39 @@ python polish.py --source output/sample-01 --out output/sample-01-polished
 ```
 
 `polish.py` は `original-ai-video.mp4`、`avatar-transparent.webm`、`speech.wav` を読みます。前後方向のオプティカルフローで中間フレームを補間し、透過色をアルファで乗算した状態で補間・拡大して縁の色混入を抑えます。Lanczos拡大と軽い輪郭補正を使用し、新しく撮影した高解像度の細部を復元する処理ではありません。ジャンプカットの自動修復機能はありません。出力は1440p・50fpsのMP4／透過WebMと処理記録です。`--frames 16` で短い試験書き出しができます。
+
+## 正面の身振りと金色の日本語タイトル
+
+v7は静止画の顔だけを動かす構成から、実写の首・肩・手が連動する構成へ戻しています。59.60〜63.60秒の正面を向いた区間を使い、インタビュアーを見る後半を除きました。短い区間の身振りを往復させた動作参照に、新しい10.7秒の音声で口元を生成します。全身動作の新規生成ではなく、同じ身振りが繰り返される制約があります。背景とテーブルは元のインタビュー映像のままです。
+
+`gesture_driver.py` は、字幕除去・マット作成済みの1080×1920・25fps動画と、出力フレームから参照フレームへの対応を読みます。折り返しを平滑化し、小数位置を双方向オプティカルフローで補間するため、参照フレーム番号の丸めによるコマの重複を減らします。音声を読み込んだり話速を変更したりする処理ではありません。
+
+```sh
+# plan内のパスはplanファイルからの相対パス。新しい出力先を指定する。
+python gesture_driver.py --plan gesture-plan.example.json --out output/motion
+```
+
+`control_points` は `[出力フレーム, 参照フレーム]` の列です。例は59.60秒を起点に切り出した素材向けです。別素材ではカット・視線・身振りを確認して設計し直してください。長い素材をすべて読み込む用途ではなく、数秒の動作参照用です。生成した `motion-driver.mp4` をprofileの `motion_video` に指定し、顔追跡と口元生成を行います。前処理を再利用する場合、出力先の `work/prepared-clean.mp4` に動作動画、`work/prepared-alpha.mkv` に生成した対応マットを置いてからexport工程を実行します。
+
+profileの `consistent_latent_noise: true` は、MuseTalkのVAEで毎フレーム同じ乱数系列を使い、サンプリング由来の質感のばらつきを減らします。省略時は従来動作です。時間的一貫性や口の自然さを保証する機能ではありません。
+
+金色タイトルは [Dela Gothic One（デラゴシック）](https://github.com/google/fonts/tree/main/ofl/delagothicone) と Noto Sans CJK JP Bold を使用します。フォントは別途配置し、DelaのSIL OFLライセンスも保存してください。元動画のフォント名は特定できていないため、同一フォントの再現ではなく、極太の日本語ゴシックに寄せたデザインです。
+
+```sh
+python gold_title.py \
+  --display-font private/fonts/DelaGothicOne-Regular.ttf \
+  --name-font /usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc \
+  --out private/gold-title.png
+```
+
+profileに `"title_overlay": "private/gold-title.png"` を追加すると、通常MP4のタイトルを差し替えられます。PNGは1080×1920で、パスはprofileから解決します。背景透過素材にはタイトルを焼き込みません。元のタイトル全体を覆い、顔・髪に重ならない構図専用の配置です。表示文字は日本語ですが、元背景に写る英字ロゴは保持します。
+
+この素材では首横にある赤・白の背景ロゴがマットに残ることがあります。今回の10.68秒・1440p50見本には、仕上げ後に次の補助処理を適用しました。顔ランドマークの外側だけを対象に色を抽出し、縁をぼかしてアルファを修正します。元動画の領域に限定した処理で、別の構図・尺にはそのまま使用できません。通常MP4の背景には適用しません。
+
+```sh
+python clean_alpha_logo.py \
+  --input output/sample-01-polished/avatar-transparent-1440p50.webm \
+  --speech output/sample-01/speech.wav \
+  --landmarks output/sample-01/work/faces.json \
+  --out output/sample-01-polished/avatar-transparent-clean.webm
+```

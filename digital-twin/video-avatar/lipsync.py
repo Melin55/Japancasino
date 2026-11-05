@@ -37,6 +37,10 @@ try:
    if not ok:raise RuntimeError('Missing source frame '+str(i))
    x1,y1,x2,y2=coords[i];y2=min(frame.shape[0],y2+10);box=[x1,y1,x2,y2]
    face=cv2.resize(frame[y1:y2,x1:x2],(256,256),interpolation=cv2.INTER_LANCZOS4)
+   # Keep the VAE sampling field fixed in face coordinates when requested.
+   # Independent random samples otherwise add avoidable frame-to-frame texture noise.
+   if cfg.get('consistent_latent_noise', False):
+    torch.manual_seed(42)
    latent=vae.get_latents_for_unet(face)
    audio_batch=pe(chunks[i:i+1].to(dtype))
    pred=unet.model(latent,torch.tensor([0]),encoder_hidden_states=audio_batch).sample
@@ -56,5 +60,5 @@ finally:
  if writer.poll() is None:writer.terminate()
 video=out/(prefix+'-lipsync.mp4')
 subprocess.run(['ffmpeg','-hide_banner','-loglevel','error','-y','-i',str(work/(prefix+'-silent.mp4')),'-i',str(out/'speech.wav'),'-map','0:v:0','-map','1:a:0','-c:v','copy','-c:a','aac','-b:a','192k','-t',str(count/25),'-movflags','+faststart',str(video)],check=True)
-metrics={'engine':'MuseTalk 1.5','frames':count,'fps':25,'dtype':str(dtype),'elapsed_seconds':time.monotonic()-started,'mean_frame_seconds':sum(timing)/len(timing),'source':str(cfg['motion_video']),'speech_synthetic':True,'mouth_synthetic':True,'body_motion':'preserved from source','output':str(video)}
+metrics={'engine':'MuseTalk 1.5','frames':count,'fps':25,'dtype':str(dtype),'elapsed_seconds':time.monotonic()-started,'mean_frame_seconds':sum(timing)/len(timing),'source':str(cfg['motion_video']),'speech_synthetic':True,'mouth_synthetic':True,'body_motion':'preserved from source','consistent_latent_noise':cfg.get('consistent_latent_noise',False),'output':str(video)}
 (out/(prefix+'-metrics.json')).write_text(json.dumps(metrics,indent=2));print('DONE',json.dumps(metrics),flush=True)

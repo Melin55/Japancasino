@@ -7,6 +7,7 @@
   "reference_audio": "private/reference-voice.wav",
   "reference_text": "private/reference-text.txt",
   "motion_video": "private/motion-driver.mp4",
+  "consistent_latent_noise": true,
   "font_path": "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
   "headline1": "初めてでも大丈夫",
   "headline2": "基本から、一緒に。"
