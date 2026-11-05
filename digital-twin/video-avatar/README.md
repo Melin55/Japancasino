@@ -1,0 +1,54 @@
+# 実写の身振りを使う動画アバター（CPU）
+
+新しい日本語台本から声と口元を生成し、参照動画の座り姿・頭・目・手の動きを残す制作パイプラインです。自由に回転できる3Dモデルや、台詞に応じて新しい身振りを生成する仕組みではありません。本人・会社の了承を得た素材を使用します。
+
+## このテンプレートの範囲
+
+- GPT-SoVITS v2：本人の短い参照音声と文字起こしから新しい発話を合成。
+- facexlib / MuseTalk 1.5：顔を追跡し、音声に合わせて下半分の顔を生成。
+- LaMa：元動画の胸付近の字幕を除去。隠れていた服や手の細部はAIによる補完。
+- Robust Video Matting：人物を切り抜き、テーブルを含めて透過WebMを出力。
+- FFmpeg：1080×1920、25fpsの通常MP4と透過WebMを出力。顔の生成自体は256×256であり、1080pの新しい顔情報を復元するものではありません。
+
+**字幕位置、タイトル領域、テーブルの切り抜き範囲は、指定された `3fs1htwZR9I` の構図専用です。** 別の構図には `clean_and_matte.py` と `export.py` の調整が必要です。前処理済みの1080×1920・25fpsの動作素材を使い、発話の長さはその素材以内にします。字幕のない原本が得られれば、補完による服・手のにじみを避けられます。
+
+## 環境
+
+Linux CPU環境で元となる各処理を実行しています。Macでの動作、GPU版、1本10分以内の処理は未検証です。実行用CLIに整理したコードは構文・実行計画を確認しており、CLI全体の再実行はしていません。最終書き出し工程は整理後のCLIから実行しています。
+
+Python 3.10、FFmpeg（libx264 / libvpx-vp9 / libopus / ffv1）、日本語フォントが必要です。[静止画CPU版](../local-cpu/README.md)のGPT-SoVITS環境に加え、Torch 2.5.1 CPU、torchvision 0.20.1 CPU、transformers 4.51.3、facexlib 0.3.0、NumPy 1.23.5、OpenCV、Pillow、SciPy、einops、および `requirements-extra.txt` の依存を使用しました。既存環境と競合する場合は専用venvを使ってください。
+
+モデルはGit外に配置します。コードだけでは動作せず、各配布元のライセンス・利用条件を確認したうえで次を用意します。
+
+- [MuseTalk](https://github.com/TMElyralab/MuseTalk)（使用コミット `0a89dec45a0192b824e3cf4daf96c239440c5ed8`）：配布元に従って `models/musetalkV15/{unet.pth,musetalk.json}`、`models/sd-vae/`、`models/whisper/`、`models/face-parse-bisent/` を配置。
+- [GPT-SoVITS](https://github.com/RVC-Boss/GPT-SoVITS) v2（使用コミット `d7c2210da8c013e81a94bfc7b811a477c99fd506`）：静止画CPU版の配置に従う。
+- [RobustVideoMatting](https://github.com/PeterL1n/RobustVideoMatting)：リポジトリ直下に `rvm_mobilenetv3.pth`。
+- [LaMa TorchScript](https://github.com/enesmsahin/simple-lama-inpainting/releases/tag/v0.1.0)：`big-lama.pt`。
+- facexlib：`detection_Resnet50_Final.pth` と `alignment_WFLW_4HG.pth` を指定のweightsフォルダに配置。
+
+## 実行
+
+```sh
+cp profile.example.json profile.json
+```
+
+`profile.json` のモデル、前処理済み動作動画、参照音声、文字起こしのパスを設定します。相対パスはprofileのあるフォルダを基準に解決します。別フォルダに依存を隔離した場合のみ `extra_python_path` を追加します。モデル・音声・動画・本人用profileはGitにコミットしません。
+
+```sh
+# 実行する処理を表示するだけ（モデルはロードしない）
+python run.py --profile profile.json --script private/script.txt --out output/sample-01 --dry-run
+
+# 新しい空の出力先に順番に生成する
+python run.py --profile profile.json --script private/script.txt --out output/sample-01
+
+# 前工程の成果物が存在する場合、指定の工程から個別に再実行できる
+python run.py --profile profile.json --script private/script.txt --out output/sample-01 --stage export
+```
+
+工程は `voice → faces → lipsync → matte → export`。CPUの取り合いを避けるため逐次実行します。BF16非対応CPUでは `--fp32` を指定します。計算時間とメモリ使用量が増える可能性があります。
+
+出力は `original-ai-video.mp4`、`avatar-transparent.webm`、`speech.wav`、生成記録JSONと中間ファイルです。透過WebMは対応する編集ソフトに読み込んでください。プレーヤーでは透明部分が黒く表示される場合があります。MP4にはAI生成サンプル表示を入れ、編集用透過素材には固定タイトルを入れません。
+
+## 確認事項
+
+新しい台本が最後まで発話されること、音声と口の動き、元映像にない顔のゆがみ、字幕除去部分のちらつき、髪・指・テーブル周囲の透過を確認します。ASR一致だけでは声の似方や自然さを保証できません。発話内容と身振りの意味が一致するとは限らず、完成見本として本人・会社による確認が必要です。

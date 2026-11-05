@@ -1,0 +1,13 @@
+{
+  "musetalk_root": "/path/to/MuseTalk",
+  "rvm_root": "/path/to/RobustVideoMatting",
+  "lama_model": "/path/to/big-lama.pt",
+  "facexlib_weights": "/path/to/SadTalker/gfpgan/weights",
+  "gpt_sovits_root": "/path/to/GPT-SoVITS",
+  "reference_audio": "private/reference-voice.wav",
+  "reference_text": "private/reference-text.txt",
+  "motion_video": "private/motion-driver.mp4",
+  "font_path": "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+  "headline1": "初めてでも大丈夫",
+  "headline2": "基本から、一緒に。"
+}
