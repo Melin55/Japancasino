@@ -6,5 +6,6 @@
   "reference_text": "../private/reference-text.txt",
   "face_size": 512,
   "threads": 4,
-  "bf16": false
+  "bf16": false,
+  "frame_stride": 2
 }

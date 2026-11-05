@@ -28,6 +28,9 @@ def main():
     threads, size, bf16 = profile.get("threads", 4), profile.get("face_size", 512), profile.get("bf16", False)
     if type(threads) is not int or threads < 1 or size not in (256, 512) or type(bf16) is not bool:
         parser.error("Use positive integer threads, face_size 256/512, and boolean bf16")
+    stride = profile.get("frame_stride", 1)
+    if type(stride) is not int or stride not in (1, 2):
+        parser.error("frame_stride must be 1 or 2")
     script, out = args.script.resolve(), args.out.resolve()
     if not script.is_file() or not script.read_text(encoding="utf-8").strip():
         parser.error("Script must be a nonempty UTF-8 text file")
@@ -39,7 +42,8 @@ def main():
               "--script", str(script), "--out", str(out / "speech.wav"), "--threads", str(threads)]
     animation = [sys.executable, str(source / "animate.py"), "--engine-root", str(paths["sadtalker_root"]),
                  "--image", str(paths["portrait"]), "--audio", str(out / "speech.wav"),
-                 "--out", str(out / "animation"), "--size", str(size), "--threads", str(threads)]
+                 "--out", str(out / "animation"), "--size", str(size), "--threads", str(threads),
+                 "--frame-stride", str(stride)]
     if bf16:
         animation.append("--bf16")
     plan = {"speech": speech, "animation": animation,

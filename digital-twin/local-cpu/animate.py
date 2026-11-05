@@ -50,6 +50,8 @@ def main():
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--size", type=int, choices=[256, 512], default=512)
     parser.add_argument("--threads", type=int, default=4)
+    parser.add_argument("--frame-stride", type=int, choices=[1, 2], default=1,
+                        help="Render every second expression frame and interpolate missing frames with optical flow")
     parser.add_argument("--bf16", action="store_true", help="Opt-in CPU BF16; tested on Linux EPYC, not Intel Mac")
     args = parser.parse_args()
     root, portrait, audio, out = [p.resolve() for p in
@@ -72,6 +74,9 @@ def main():
     os.chdir(root)
     sys.path.insert(0, str(root))
     import torch
+    import cv2
+    cv2.setNumThreads(1)
+    import numpy as np
     import torchvision.transforms.functional as functional
     torch.set_num_threads(args.threads)
     torch.set_num_interop_threads(1)
@@ -82,14 +87,63 @@ def main():
     cache_report = []
 
     def render(*positional, **keyword):
-        # Scope caches to one source image / inference call. Driving features
-        # and expression-dependent layers are always recomputed.
-        restored = install_source_caches(positional[3], torch)
+        # Only the source encoders are cached. Expressions use their original audio timing.
+        original_count = positional[2].shape[1]
+        indices = list(range(0, original_count, args.frame_stride))
+        if indices[-1] != original_count - 1:
+            indices.append(original_count - 1)
+        selected = list(positional)
+        selected[2] = positional[2][:, indices]
+        for index in (7, 8, 9):
+            if len(selected) > index and selected[index] is not None:
+                selected[index] = selected[index][:, indices]
+        generator = positional[3]
+        restored = install_source_caches(generator, torch)
+        forward = generator.forward
+        progress = {"count": 0}
+        def capture(*a, **kw):
+            result = forward(*a, **kw)
+            index = progress["count"]
+            if index in (0, 1, 2, 25, 50, 100):
+                rgb = result["prediction"][0].detach().float().cpu().permute(1, 2, 0).numpy()
+                cv2.imwrite(str(out / f"face-keyframe-{indices[index]}.jpg"),
+                            cv2.cvtColor((rgb.clip(0, 1)*255).astype(np.uint8), cv2.COLOR_RGB2BGR))
+            progress["count"] += 1
+            return result
+        generator.forward = capture
         try:
             with torch.autocast("cpu", dtype=torch.bfloat16, enabled=args.bf16):
-                result = original(*positional, **keyword)
-            return result.float()
+                result = original(*selected, **keyword).float()
+            if args.frame_stride == 1:
+                return result
+            if result.shape[0] != 1:
+                raise RuntimeError("Sparse interpolation expects batch size one")
+            frames = result[0].cpu().permute(0, 2, 3, 1).numpy()
+            height, width = frames.shape[1:3]
+            yy, xx = np.indices((height, width), dtype=np.float32)
+            flow = cv2.DISOpticalFlow_create(cv2.DISOPTICAL_FLOW_PRESET_MEDIUM)
+            expanded = []
+            for k in range(len(indices)-1):
+                left, right = frames[k], frames[k+1]
+                expanded.append(left)
+                gap = indices[k+1] - indices[k]
+                if gap > 1:
+                    ga = cv2.cvtColor((left.clip(0,1)*255).astype(np.uint8), cv2.COLOR_RGB2GRAY)
+                    gb = cv2.cvtColor((right.clip(0,1)*255).astype(np.uint8), cv2.COLOR_RGB2GRAY)
+                    ab, ba = flow.calc(ga, gb, None), flow.calc(gb, ga, None)
+                    for step in range(1, gap):
+                        t = step/gap
+                        wa = cv2.remap(left, xx-ab[:,:,0]*t, yy-ab[:,:,1]*t,
+                                       cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+                        wb = cv2.remap(right, xx-ba[:,:,0]*(1-t), yy-ba[:,:,1]*(1-t),
+                                       cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+                        expanded.append((wa*(1-t)+wb*t).clip(0,1))
+            expanded.append(frames[-1])
+            if len(expanded) != original_count:
+                raise RuntimeError("Interpolation changed the number of speech frames")
+            return torch.from_numpy(np.stack(expanded)).permute(0,3,1,2).unsqueeze(0)
         finally:
+            generator.forward = forward
             for name, module, forward, state in restored:
                 module.forward = forward
                 cache_report.append({"module": name, "verified_equal_to_uncached": state["verified"], "hits": state["hits"]})
@@ -105,7 +159,8 @@ def main():
     if len(videos) != 1:
         raise RuntimeError(f"Expected one generated video, found {len(videos)}")
     result = {"video": str(videos[0]), "engine": "SadTalker", "device": "CPU",
-              "torch": torch.__version__, "bf16": args.bf16, "face_render_pixels": args.size,
+              "torch": torch.__version__, "bf16": args.bf16, "face_render_pixels": args.size, "frame_stride": args.frame_stride,
+              "interpolation": "bidirectional optical flow" if args.frame_stride > 1 else None,
               "seconds": time.monotonic() - started, "source_encoder_cache": cache_report}
     (out / "render.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(result, ensure_ascii=False))
