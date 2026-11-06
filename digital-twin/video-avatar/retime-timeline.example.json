@@ -1,0 +1,18 @@
+{
+  "speech_speed": 1.07,
+  "segments": [
+    {"start": 0, "end": 0.08, "kind": "pause"},
+    {"start": 0.08, "end": 1.08, "kind": "speech"},
+    {"start": 1.08, "end": 1.24, "kind": "pause"},
+    {"start": 1.24, "end": 2.88, "kind": "speech"},
+    {"start": 2.88, "end": 3.56, "kind": "pause"},
+    {"start": 3.56, "end": 4.7, "kind": "speech"},
+    {"start": 4.7, "end": 4.9, "kind": "pause"},
+    {"start": 4.9, "end": 6.4, "kind": "speech"},
+    {"start": 6.4, "end": 7.08, "kind": "pause"},
+    {"start": 7.08, "end": 8.16, "kind": "speech"},
+    {"start": 8.16, "end": 8.32, "kind": "pause"},
+    {"start": 8.32, "end": 9.72, "kind": "speech"},
+    {"start": 9.72, "end": 10.72, "kind": "tail"}
+  ]
+}
