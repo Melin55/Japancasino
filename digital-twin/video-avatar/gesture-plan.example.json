@@ -1,0 +1,8 @@
+{
+  "source_color": "private/prepared-clean.mp4",
+  "source_alpha": "private/prepared-alpha.mkv",
+  "source_origin_seconds": 59.6,
+  "output_frames": 268,
+  "control_points": [[0, 0], [100, 100], [200, 0], [267, 67]],
+  "turn_smoothing_frames": 2
+}

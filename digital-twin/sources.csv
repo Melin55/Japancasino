@@ -1,0 +1,31 @@
+﻿id,title,url,publisher,kind,published_date,date_scope_status,current_media_candidate,recording_date_verified,media_downloaded,audiovisually_reviewed,notes
+V01,今、大注目の日本カジノスクール校長に直撃インタビュー！,https://www.youtube.com/watch?v=hGfcVkkqxYg,MONDO TV,video,,date_unverified,False,False,False,False,単独取材の候補。公開年・尺・単独発話の連続性は未確認。現在の顔との年齢差を確認。
+V02,MBS NEWS：カジノディーラー養成スクール校長への取材（2024-04-16）,https://www.youtube.com/watch?v=H8mRwjDYKnc,MBS NEWS,video,2024-04-16,within_window,True,False,False,False,学校公式記事が本人への取材として埋め込み。記者との声の重なり、テロップ、カットを確認。
+V03,NoBorder NEWS #039：大阪IRの光と影,https://www.youtube.com/watch?v=4jqkaNb1pyM,NoBorder,video,2026-06-01,within_window,True,False,False,False,出演告知と番組リンクを確認。複数話者の対談。本人の発話のみ切り出しが必要。告知の第49回と本編#039は同一回か再確認。
+V04,日本カジノスクール紹介動画,https://www.youtube.com/watch?v=Y2h2XbKc7Fk,日本カジノスクール公式,video,,date_unverified,False,False,False,False,学校保有の撮影原本を優先して入手。説明文に校長名があるだけでは本人出演と判定しない。
+V05,日本カジノスクール公式,https://www.youtube.com/watch?v=NzVlrKYij4M,日本カジノスクール公式,video,,date_unverified,False,False,False,False,出演者・発話・撮影時期・元ファイルの有無を確認。
+V06,カジノディーラー育成の専門コース新設へ 2030年のIR開業に向け,https://www.youtube.com/watch?v=Yz7yySH3Odc,ABCニュース,video,2026-10-15,within_window,True,False,False,False,校長の会見コメントが検索結果に明記。発話時間と画角は未確認。
+V07,大阪IR開業に向け：日本カジノスクールがIR運営会社公認コース設立へ,https://www.youtube.com/watch?v=Fy7DcvD6rmI,MBS NEWS,video,2026-10-15,within_window,True,False,False,False,2026年会見の声・外見の候補。ABCと同じ会見の可能性。二重に学習量として数えない。
+V08,関西テレビ newsランナー：大阪IR特集,https://www.youtube.com/watch?v=oOsL0nLhrYU,関西テレビ,video,2025-12-26,within_window,True,False,False,False,放送局記事に本人コメントと動画埋め込み。番組内の本人の発話区間は未確認。
+V09,職業は「カジノディーラー」,https://www.youtube.com/watch?v=CW_-3sLUrLU,時事通信（公開元は再確認）,video,,date_unverified,False,False,False,False,関連する時事記事には本人取材あり。動画内の出演・本人音声は未確認。
+V10,ういちとヒカルのおもスロい人々 第9回 大岩根 成悦（前編）,https://fod.fujitv.co.jp/title/g2r4/g2r4110171/,FOD／番組権利元,paid_video,,date_unverified,False,False,False,False,番組ページの存在・29分の掲載を確認。未購入・未視聴。視聴権と素材再利用の権利は別。
+V11,ういちとヒカルのおもスロい人々 第10回 大岩根 成悦（後編）,https://www.videomarket.jp/title/163032/A163032010999H01,ビデオマーケット／番組権利元,paid_video,,date_unverified,False,False,False,False,ページ本文で本人出演・29分を確認。未購入・未視聴。古い外見と複数話者に注意。
+S01,ABC：MGM大阪公認のディーラー育成コース（Reel）,https://www.instagram.com/reel/DeiaQYKhNV0/,ABCニュース（確認待ち）,social_video,,date_unverified,False,False,False,False,V06の再配信の可能性。投稿本文・本人音声・重複を確認。
+S02,MBS：大阪IR公認コース（Reel）,https://www.instagram.com/reel/Den4rXAvGDW/,MBS NEWS（確認待ち）,social_video,,date_unverified,False,False,False,False,V07の再配信の可能性。別の学習素材として重複計上しない。
+S03,NoBorderニュース出演告知,https://www.instagram.com/p/DZChd2YGElH/,NoBorder公式,announcement,,date_unverified,False,,False,False,本人出演の手がかり。告知自体を本人の声の素材としない。
+A01,文化放送 斉藤一美 ニュースワイド SAKIDORI!,http://www.joqr.co.jp/sakidori/2018/08/13/,文化放送,audio_lead,2018-08-13,outside_window,False,False,False,False,2018-08-13出演記録。再生可能な音声ファイルは未発見。
+A02,森本毅郎・スタンバイ！ 現場にアタック,https://www.tbs.co.jp/radio/stand-by/attack/20031114.html,TBSラジオ,audio_lead,2003-11-14,outside_window,False,False,False,False,2003年の出演記録。音声ファイル未確認。現在の声の基準には古い。
+A03,ゆめのたね放送局 yukoとダイバーシティな仲間たち,https://casinoschool.co.jp/media-appearance/,ゆめのたね放送局／学校掲載記録,audio_lead,2020-04-05,outside_window,False,False,False,False,学校メディア一覧に2020-04-05掲載。本人出演と音声の現存は未確認。
+A04,fm GIG 実現計画書講座,https://casinoschool.co.jp/media-appearance/,fm GIG／学校掲載記録,audio_lead,2020-01-13,outside_window,False,False,False,False,学校メディア一覧に2020-01-13掲載。本人出演と音声の現存は未確認。
+R01,公式：校長挨拶・沿革,https://casinoschool.co.jp/school-information/school-about/,日本カジノスクール,identity_reference,,date_unverified,False,,False,False,株式会社ブライト代表取締役・日本カジノスクール校長 大岩根成悦／Masayoshi Oiwaneと確認。声の素材ではない。
+R02,公式：株式会社ブライト 会社概要,https://bright777.com/corporate,株式会社ブライト,identity_reference,,date_unverified,False,,False,False,検索結果に代表取締役 大岩根成悦。役職の補助確認。
+R03,MBS取材を学校公式が掲載,https://casinoschool.co.jp/topics/medeia20240416/,日本カジノスクール,corroboration,,date_unverified,False,,False,False,V02の本人取材を裏付けるページ。別の講師の講座動画lB0IbETBmwwも埋め込まれているため混同注意。
+R04,職業は「カジノディーラー」 仕事内容・働き方・賃金,https://www.jiji.com/jc/v8?id=2023CasinoDealer02,時事通信,text_reference,2023-05-30,outside_window,False,,False,False,本人の発言と経歴の文章資料。文章から声・発音の特徴は推定しない。
+R05,カジノディーラーって怪しくない？ 日本初の養成スクールにツッコむ,https://r25.jp/companies/casinoschool/interview/813557705032597505,新R25,text_reference,2023-08-02,outside_window,False,,False,False,本人インタビューの検索結果。音声・映像の有無は未確認。
+R06,カジノ業界に多くの日本人を輩出,https://amusement-japan.co.jp/article/detail/10003876/,Amusement Japan,text_reference,2023-10-20,outside_window,False,,False,False,本人インタビューの文章資料候補。音声・映像は未確認。
+R07,世界最高のIR実現へ ホスピタリティ人材育成,https://www.event-marketing.co.jp/Interview/casino_school_oiwane,月刊イベントマーケティング,text_reference,2019-04-26,outside_window,False,,False,False,本人の考え方・説明内容の参考。声の学習用ファイルではない。
+R08,関西テレビ：大阪IR特集の本文と埋め込み動画,https://www.ktv.jp/news/feature/251226-yoshimura2/,関西テレビ,corroboration,,date_unverified,False,,False,False,V08の本人コメントと放送日・動画IDを裏付け。V08と同一素材。
+R09,NoBorder：2026年6月1日配信記事,https://nobordertokyo.com/posts/noborder-news-039-haraguchi-osaka-ir-2026,NoBorder,corroboration,,date_unverified,False,,False,False,V03への本編リンクを確認。別動画として数えない。
+H01,学校公式YouTubeチャンネル,https://www.youtube.com/channel/UCU06edGMSh_4LEY82TZpG_w,日本カジノスクール,source_hub,,date_unverified,False,,False,False,講師・卒業生動画が多数。本人の出演区間を人手で確認し、学校保有の元データを探す入口。
+H02,学校公式Instagram,https://www.instagram.com/jcs__official,日本カジノスクール,source_hub,,date_unverified,False,,False,False,新しい校長コンテンツの探索先。個別投稿の検証と元ファイルの確保が必要。
+H03,学校公式メディア掲載実績,https://casinoschool.co.jp/media-appearance/,日本カジノスクール,source_hub,,date_unverified,False,,False,False,テレビ・ラジオの出演記録。掲載の存在は本人出演・現存する動画ファイル・利用許諾を意味しない。未来日付の項目は採用しない。
