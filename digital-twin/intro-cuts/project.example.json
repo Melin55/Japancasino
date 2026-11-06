@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0",
+  "paths": {
+    "assets": "assets",
+    "exports": "exports"
+  },
+  "existingCuts": [
+    {
+      "sceneNumber": 1,
+      "source": "sources/cut-01-generated.mp4",
+      "sourceFrames": [
+        28,
+        124
+      ],
+      "output": "cut-01-reviewed.mp4",
+      "note": "Last four seconds include completion of dealing one card."
+    },
+    {
+      "sceneNumber": 3,
+      "source": "sources/cut-03-generated.mp4",
+      "sourceFrames": [
+        0,
+        312
+      ],
+      "output": "cut-03-reviewed.mp4"
+    }
+  ],
+  "endcard": {
+    "background": "#FFFFFF",
+    "logo": {
+      "sourcePdf": "sources/official-brochure.pdf",
+      "sourcePageIndex": 0,
+      "sourceClipPoints": [
+        161,
+        653,
+        426,
+        704
+      ],
+      "renderWidth": 840,
+      "officialSourceUrl": "https://casinoschool.co.jp/wp-content/uploads/2022_boshu_online-1.pdf",
+      "sourceDescription": "Official school admission booklet, page 1 logo lockup only; dates/contact text excluded."
+    }
+  }
+}
