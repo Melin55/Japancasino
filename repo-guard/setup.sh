@@ -3,20 +3,26 @@ set -euo pipefail
 
 fail() { printf '%s\n' "$*" >&2; exit 1; }
 
+[[ $# -le 2 ]] || fail '使い方: bash setup.sh [コピー元の OWNER/REPO] [金庫を作る GitHub ID]'
 requested=${1:-Melin55/Japancasino}
 requested=${requested#https://github.com/}
 requested=${requested%.git}
 [[ "$requested" =~ ^[a-zA-Z0-9-]+/[a-zA-Z0-9_.-]+$ ]] || fail 'GitHub の OWNER/REPO を指定してください。'
+requested_owner=${2:-}
+if [[ -n "$requested_owner" && ! "$requested_owner" =~ ^[a-zA-Z0-9-]+$ ]]; then
+  fail '金庫を作る GitHub ID を指定してください。'
+fi
 base_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 export GH_HOST=github.com
 
-login=$(gh api user --jq '.login') || fail 'GitHub CLI でリポジトリ所有者の認証が必要です。'
+login=$(gh api user --jq '.login') || fail 'GitHub CLI で認証中のアカウントを確認できませんでした。'
 source=$(gh api "repos/$requested" --jq 'select(.visibility == "public" and .owner.type == "User") | .full_name')
 [[ -n "$source" ]] || fail 'この手順は個人名義の公開リポジトリ専用です。'
-owner=${source%%/*}
-[[ "$login" == "$owner" ]] || fail "認証中は $login です。$owner 本人の認証が必要です。GitHub は変更していません。"
-vault=$source-vault
-watcher=$source-backup
+owner=${requested_owner:-${source%%/*}}
+[[ "$login" == "$owner" ]] || fail "認証中は $login です。金庫を作る $owner 本人の認証が必要です。GitHub は変更していません。"
+repo_name=${source#*/}
+vault=$owner/$repo_name-vault
+watcher=$owner/$repo_name-backup
 
 ensure_private_repo() {
   local repo=$1 description=$2 settings collaborators invitations

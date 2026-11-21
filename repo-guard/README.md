@@ -1,6 +1,6 @@
 # GitHub Free で自動バックアップ
 
-`Melin55/Japancasino` の Git の履歴を、みきこさん名義の非公開リポジトリに保存します。元リポジトリへの変更や共同作業者の権限変更は不要です。約3時間おきに実行し、後から元のブランチやタグが削除・上書きされても、保存済みの履歴を金庫から復元できます。
+`Melin55/Japancasino` の Git の履歴を、みきこさんや協力者それぞれの非公開リポジトリに保存できます。元リポジトリへの変更や共同作業者の権限変更は不要です。約3時間おきに実行し、後から元のブランチやタグが削除・上書きされても、保存済みの履歴を金庫から復元できます。
 
 ## 初回設定
 
@@ -22,9 +22,20 @@ env -u GH_TOKEN -u GITHUB_TOKEN GH_CONFIG_DIR="$repo_guard_gh" \
 - `Melin55/Japancasino-vault` が金庫です。見張り役だけが使う専用の SSH 鍵を設定し、金庫側の Actions は停止します。二つの非公開リポジトリに共同作業者を追加する必要はありません。
 - 設定が途中で止まった場合は、同じアカウントで `setup.sh` を再実行できます。自分で作成した同名のリポジトリがある場合は処理を止めます。
 
+## 協力者が自分用の控えを作る場合
+
+自分のアカウントで GitHub CLI にログインし、ワークフローを登録できる権限を追加します。`自分のGitHub-ID` を実際の ID に置き換えて実行します。
+
+```sh
+gh auth refresh --hostname github.com --scopes workflow
+bash repo-guard/setup.sh Melin55/Japancasino 自分のGitHub-ID
+```
+
+自分のアカウントに非公開の `Japancasino-backup` と `Japancasino-vault` が作られます。公開されている本体から読み取るので、みきこさん側の金庫の設定や認証を待たずに進められます。
+
 ## 復元
 
-まず金庫の `backup-log` ブランチを確認します。各コミットの `refs.txt` には、当時のコミットやタグの ID と名前が記録されています。例えば、以前の `refs/heads/main` を別のローカルブランチとして取り出す手順は次のとおりです。
+まず金庫の `backup-log` ブランチを確認します。各コミットの `refs.txt` には、当時のコミットやタグの ID と名前が記録されています。例えば、以前の `refs/heads/main` を別のローカルブランチとして取り出す手順は次のとおりです。自分用の金庫を復元する場合は、接続先の `Melin55` を金庫の持ち主の ID に置き換えます。
 
 ```sh
 git clone --branch backup-log --single-branch --no-tags git@github.com:Melin55/Japancasino-vault.git

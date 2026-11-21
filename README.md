@@ -32,4 +32,4 @@ curl --fail http://127.0.0.1:8000/
 
 ## バックアップ
 
-リポジトリの Git 履歴をみきこさん名義の非公開リポジトリに保存する手順は [GitHub Free で自動バックアップ](repo-guard/README.md) にあります。
+リポジトリの Git 履歴を自分の非公開リポジトリに保存する手順は [GitHub Free で自動バックアップ](repo-guard/README.md) にあります。
