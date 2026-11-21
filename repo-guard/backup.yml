@@ -1,0 +1,52 @@
+name: Git repository backup
+
+on:
+  schedule:
+    - cron: '17 0,6,12,18 * * *'
+  workflow_dispatch:
+    inputs:
+      setup_run:
+        description: Initial setup verification ID
+        type: string
+        required: false
+
+run-name: Backup ${{ inputs.setup_run || 'scheduled or manual' }}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repository-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Copy Git refs to the vault
+        shell: bash
+        env:
+          SOURCE_REPO: ${{ vars.SOURCE_REPO }}
+          VAULT_REPO: ${{ vars.VAULT_REPO }}
+          VAULT_SSH_KEY: ${{ secrets.VAULT_SSH_KEY }}
+        run: |
+          repo_pattern='^[A-Za-z0-9-]+/[A-Za-z0-9_.-]+$'
+          if [[ ! "$SOURCE_REPO" =~ $repo_pattern || ! "$VAULT_REPO" =~ $repo_pattern || -z "$VAULT_SSH_KEY" ]]; then
+            echo '::error::バックアップ元、金庫、または金庫のSSH鍵が設定されていません。'
+            exit 1
+          fi
+
+          key_dir=$(mktemp -d)
+          trap 'rm -rf "$key_dir"' EXIT
+          umask 077
+          printf '%s\n' "$VAULT_SSH_KEY" > "$key_dir/vault"
+          unset VAULT_SSH_KEY
+          # https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints
+          printf '%s\n' 'github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl' > "$key_dir/known_hosts"
+          export GIT_SSH_COMMAND="ssh -F /dev/null -i $key_dir/vault -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$key_dir/known_hosts"
+          export GIT_TERMINAL_PROMPT=0
+          bash backup.sh "https://github.com/$SOURCE_REPO.git" "git@github.com:$VAULT_REPO.git"
